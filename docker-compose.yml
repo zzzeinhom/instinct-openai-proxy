@@ -1,0 +1,30 @@
+services:
+  instinct-proxy:
+    build: .
+    container_name: instinct-proxy
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      TG_SESSION_DIR: /app/sessions
+      WAHA_WEBHOOK_URL: http://instinct-proxy:8000/webhooks/whatsapp
+      WAHA_BASE_URL: ${WAHA_DOCKER_BASE_URL:-http://waha:3000}
+    volumes:
+      - ./sessions:/app/sessions
+
+  waha:
+    image: devlikeapro/waha:latest
+    container_name: instinct-waha
+    profiles:
+      - whatsapp
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      WAHA_API_KEY: ${WAHA_API_KEY:-}
+      WHATSAPP_HOOK_URL: http://instinct-proxy:8000/webhooks/whatsapp
+      WHATSAPP_HOOK_EVENTS: message
+    volumes:
+      - ./waha-sessions:/app/.sessions

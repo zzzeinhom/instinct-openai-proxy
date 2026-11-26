@@ -1,0 +1,15 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.git/
+.env
+.env.*
+!.env.example
+*.session
+*.session-journal
+.pytest_cache/
+sessions/
+waha-sessions/
+tests/
